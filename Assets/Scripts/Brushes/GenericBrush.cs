@@ -5,7 +5,7 @@ using UnityEngine;
 public class GenericBrush : MonoBehaviour, IBrush
 {
     GameObject previewObject;
-    public ITileAttachment tileAttachment;
+    public IAttachment attachment;
     public Renderer[] previewObjectRenderers;
 
     public bool DrawBegin(Map map, Vector3Int coordinate, GameObject brushPrefab)
@@ -36,7 +36,7 @@ public class GenericBrush : MonoBehaviour, IBrush
         if (!previewObject && brushPrefab != null)
         {
             previewObject = Instantiate(brushPrefab);
-            tileAttachment = previewObject.GetComponent(typeof(ITileAttachment)) as ITileAttachment;
+            attachment = previewObject.GetComponent(typeof(IAttachment)) as IAttachment;
             previewObjectRenderers = previewObject.GetComponentsInChildren<Renderer>();
         }
 
@@ -45,8 +45,8 @@ public class GenericBrush : MonoBehaviour, IBrush
             previewObject.transform.position = new Vector3(coordinate.x, 0, coordinate.z);
 
             if (map.IsWithinBounds(coordinate.x, coordinate.z) &&
-                map.IsWithinBounds(coordinate.x + tileAttachment.GetDimension().x - 1,
-                coordinate.z + tileAttachment.GetDimension().z - 1))
+                map.IsWithinBounds(coordinate.x + attachment.GetDimension().x - 1,
+                coordinate.z + attachment.GetDimension().z - 1))
             {
                 previewObject.SetActive(true);
             } else
@@ -56,8 +56,8 @@ public class GenericBrush : MonoBehaviour, IBrush
 
             bool occupied = map.IsTileSpaceOccupied(coordinate.x,
                coordinate.z,
-               tileAttachment.GetDimension().x,
-               tileAttachment.GetDimension().z);
+               attachment.GetDimension().x,
+               attachment.GetDimension().z);
 
             if (occupied)
             {

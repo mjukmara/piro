@@ -1,74 +1,95 @@
 ﻿using System;
 using UnityEngine;
 
-public class Tile : MonoBehaviour
+public class Tile : MonoBehaviour, ITile
 {
-    public Walkable walkable;
-    public ITileAttachment attachment;
-    public Tile claimant;
+    public IAttachment attachment;
+    private IClaimant claimant;
 
-    public enum Walkable
+    public IAttachment GetAttachment()
     {
-        UNWALKABLE,
-        WALKABLE
-    }
-
-    public bool isWalkable() {
-        return walkable == Walkable.WALKABLE;
-    }
-
-    public ITileAttachment GetAttachment() {
         return attachment;
     }
 
-    public bool Attach(GameObject attachmentPrefab) {
-        if (IsClaimed()) {
+    public bool Attach(IAttachment attachment)
+    {
+        if (IsClaimed())
+        {
             Debug.LogWarning("Could not attach object to tile, because it is already claimed by another claimant...");
             return false;
         }
 
-        if (attachment == null) {
-            GameObject go = Instantiate(attachmentPrefab);
-            go.transform.SetParent(transform);
-            go.transform.localPosition = Vector3.zero;
-            ITileAttachment attachment = go.GetComponent(typeof(ITileAttachment)) as ITileAttachment;
-            this.attachment = attachment;
-            attachment.OnAttached(this);
-            return true;
-        } else
+        if (HasAttachment())
         {
             Debug.LogWarning("Failed to attach object to tile, because it is already occupied...");
             return false;
         }
+
+        //GameObject go = Instantiate(attachmentPrefab);
+        //go.transform.SetParent(transform);
+        //go.transform.localPosition = Vector3.zero;
+        //ITileAttachment attachment = go.GetComponent(typeof(ITileAttachment)) as ITileAttachment;
+        this.attachment = attachment;
+        attachment.OnAttached(this);
+        return true;
     }
 
-    public bool Detach()
+    public bool Detach(IAttachment attachment)
     {
+        if (!HasAttachment())
+        {
+            Debug.LogWarning("Failed to detach specified object, because nothing is attached...");
+            return false;
+        }
+
+        if (this.attachment == attachment)
+        {
+            this.attachment = null;
+            this.attachment.OnDetached(this);
+            return true;
+        } else
+        {
+            Debug.LogWarning("Failed to detach specified object, because it is not attached...");
+            return false;
+        }
+    }
+
+    public bool DetachAny()
+    {
+        if (!HasAttachment())
+        {
+            Debug.LogWarning("Failed to detach any object, because nothing is attached...");
+            return false;
+        }
+
         if (IsClaimed())
         {
             Debug.LogWarning("Could not detach object from tile, because it is claimed by another tile, only the claimant can detach the attachment...");
             return false;
         }
 
-        if (attachment != null) {
-            attachment = null;
-            attachment.OnDetached(this);
-            return true;
-        } else {
-            Debug.LogWarning("Failed to detach object from tile, because no object is attached...");
-            return false;
-        }
+        IAttachment attachment = this.attachment;
+        this.attachment = null;
+        attachment.OnDetached(this);
+        return true;
     }
 
-    public bool HasAttachment() {
+    public bool HasAttachment()
+    {
         return (attachment != null);
     }
 
-    public bool IsClaimed() {
+    public bool IsClaimed()
+    {
         return (claimant != null);
     }
 
-    public bool Claim(Tile claimant)
+    public bool IsClaimedBy(IClaimant claimant)
+    {
+        throw new NotImplementedException();
+    }
+
+    public bool SetClaimant(IClaimant claimant)
     {
         if (IsClaimed())
         {
@@ -79,7 +100,8 @@ public class Tile : MonoBehaviour
         this.claimant = claimant;
         return true;
     }
-    public bool Unclaim(Tile claimant)
+
+    public bool UnsetClaimant(IClaimant claimant)
     {
         if (!IsClaimed())
         {
@@ -89,5 +111,10 @@ public class Tile : MonoBehaviour
 
         this.claimant = null;
         return true;
+    }
+
+    public IClaimant GetClaimant()
+    {
+        return claimant;
     }
 }

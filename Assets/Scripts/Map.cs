@@ -100,34 +100,52 @@ public class Map : MonoBehaviour
         if (x < 0 || x >= mapData.width) return false;
         if (z < 0 || z >= mapData.length) return false;
 
-        // A large attachment occupies more than one tile, therefore we must ensure that none of the affected tiles have any attachment.
-        ITileAttachment attachment = attachmentPrefab.GetComponent(typeof(ITileAttachment)) as ITileAttachment;
-        Vector3Int dim = attachment.GetDimension();
-        if (IsTileSpaceOccupied(x, z, dim.x, dim.z)) {
-            Debug.LogWarning("Can not attach object to tile. At least one tile is already occupied...");
-            return false;
-        }
 
         Tile tile = GetTile(x, z);
-        bool attached = tile.Attach(attachmentPrefab);
-        if (attached) {
-            bool claimedTiles = AssignClaimantToTiles(x, z, dim.x, dim.z);
-            if (!claimedTiles)
+
+        if (!tile.HasAttachment())
+        {
+            GameObject attachmentGO = Instantiate(attachmentPrefab);
+            attachmentGO.transform.SetParent(transform);
+            attachmentGO.transform.localPosition = Vector3.zero;
+            attachmentGO.transform.position = new Vector3(x, 0, z);
+            IAttachment attachment = attachmentGO.GetComponent(typeof(IAttachment)) as IAttachment;
+
+            // A large attachment occupies more than one tile, therefore we must ensure that none of the affected tiles have any attachment.
+            Vector3Int dim = attachment.GetDimension();
+            if (IsTileSpaceOccupied(x, z, dim.x, dim.z))
             {
-                Debug.LogError("Failed to claim nearby tiles!");
+                Debug.LogWarning("Can not attach object to tile. At least one tile is already occupied...");
+                Destroy(attachmentGO);
                 return false;
             }
-            return true;
+
+            bool attached = tile.Attach(attachment);
+            if (attached)
+            {
+                bool claimedTiles = AssignClaimantToTiles(x, z, dim.x, dim.z);
+                if (!claimedTiles)
+                {
+                    Debug.LogError("Failed to claim nearby tiles!");
+                    return false;
+                }
+                return true;
+            }
+            else
+            {
+                Debug.LogError("Failed to attach...");
+                return false;
+            }
         } else
         {
-            Debug.LogWarning("Failed to attach...");
+            Debug.LogWarning("Failed to attach, because the tile already has an attachment...");
             return false;
         }
     }
 
     public bool Detach(int x, int z) {
         Tile tile = GetTile(x, z);
-        bool detached = tile.Detach();
+        bool detached = tile.DetachAny();
         if (detached)
         {
             return true;
@@ -194,7 +212,7 @@ public class Map : MonoBehaviour
 
                 if (tile)
                 {
-                    bool claimed = tile.Claim(claimant);
+                    bool claimed = tile.SetClaimant(claimant);
                     if (!claimed) {
                         Debug.LogError("Failed to claim tile!");
                         return false;
@@ -234,10 +252,6 @@ public class Map : MonoBehaviour
 
             Tile tile = GetTile(tileX, tileZ);
             if (tile == null) {
-                continue;
-            }
-
-            if (!tile.isWalkable()) {
                 continue;
             }
 

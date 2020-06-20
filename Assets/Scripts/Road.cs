@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System;
 using UnityEngine;
 
-public class Road : MonoBehaviour, ITileAttachment
+public class Road : MonoBehaviour, IAttachment
 {
     public int width = 1;
     public int length = 1;
@@ -12,14 +12,14 @@ public class Road : MonoBehaviour, ITileAttachment
     {
         return new Vector3Int(width, 0, length);
     }
-
-    public void OnAttached(Tile tile)
+    
+    public void OnAttached(IAttachPoint attachPoint)
     {
-        //throw new NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 
-    public void OnDetached(Tile tile)
+    public void OnDetached(IAttachPoint attachPoint)
     {
-        //throw new NotImplementedException();
+        //throw new System.NotImplementedException();
     }
 }
