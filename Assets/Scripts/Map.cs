@@ -89,7 +89,6 @@ public class Map : MonoBehaviour
     public Tile GetTile(int x, int z)
     {
         if (x < 0 || x >= mapData.width || z < 0 || z >= mapData.length) {
-            Debug.LogError("Impossible to find tile outside of map bounds...");
             return null;
         }
 
@@ -99,7 +98,6 @@ public class Map : MonoBehaviour
     public bool Attach(int x, int z, GameObject attachmentPrefab) {
         if (x < 0 || x >= mapData.width) return false;
         if (z < 0 || z >= mapData.length) return false;
-
 
         Tile tile = GetTile(x, z);
 
@@ -129,6 +127,14 @@ public class Map : MonoBehaviour
                     Debug.LogError("Failed to claim nearby tiles!");
                     return false;
                 }
+
+                List<ITile> adjacentTiles = GetAdjacentTiles(x, z);
+                foreach(ITile adjacentTile in adjacentTiles)
+                {
+                    adjacentTile.OnNeighborChanged(tile);
+                    tile.OnNeighborChanged(adjacentTile);
+                }
+
                 return true;
             }
             else
@@ -273,5 +279,18 @@ public class Map : MonoBehaviour
     public void SaveMap()
     {
 
+    }
+
+    public List<ITile> GetAdjacentTiles(int x, int z)
+    {
+        List<ITile> adjacentTiles = new List<ITile>();
+        for (int i=0; i<9; i++)
+        {
+            int dx = (i % 3);
+            int dz = (i / 3);
+            if (dx == 1 && dz == 1) continue;
+            if (GetTile(x - 1 + dx, z - 1 + dz) != null) adjacentTiles.Add(GetTile(x - 1 + dx, z - 1 + dz));
+        }
+        return adjacentTiles;
     }
 }

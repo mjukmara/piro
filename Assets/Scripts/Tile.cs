@@ -117,4 +117,33 @@ public class Tile : MonoBehaviour, ITile
     {
         return claimant;
     }
+
+    public void OnNeighborChanged(ITile neighbor)
+    {
+        int dx = neighbor.GetCoordinate().x - GetCoordinate().x;
+        int dz = neighbor.GetCoordinate().z - GetCoordinate().z;
+
+        bool isRight = (dx == 1 && dz == 0);
+        bool isLeft = (dx == -1 && dz == 0);
+        bool isForward = (dx == 0 && dz == 1);
+        bool isBackward = (dx == 0 && dz == -1);
+
+        IAttachment attachment = GetAttachment();
+        IAttachment neighborAttachment = neighbor.GetAttachment();
+        if (attachment is Road)
+        {
+            Road road = (Road)attachment;
+
+            bool isNeighborRoad = (neighborAttachment is Road);
+            if (isNeighborRoad && isRight) road.connectRight = true;
+            if (isNeighborRoad && isLeft) road.connectLeft = true;
+            if (isNeighborRoad && isForward) road.connectForward = true;
+            if (isNeighborRoad && isBackward) road.connectBackward = true;
+        }
+    }
+
+    public Vector3Int GetCoordinate()
+    {
+        return Vector3Int.FloorToInt(transform.position);
+    }
 }

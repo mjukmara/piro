@@ -19,8 +19,10 @@ public class RoadBrush : MonoBehaviour, IBrush
     {
         foreach (GameObject previewObject in previewObjectsX)
         {
-            if (previewObject.activeSelf) {
-                map.Attach((int)previewObject.transform.position.x, (int)previewObject.transform.position.z, brushPrefab);
+            if (previewObject.activeSelf)
+            {
+                Vector3Int pos = Vector3Int.FloorToInt(previewObject.transform.position);
+                map.Attach(pos.x, pos.z, brushPrefab);
                 previewObject.SetActive(false);
             }
         }
@@ -29,7 +31,8 @@ public class RoadBrush : MonoBehaviour, IBrush
         {
             if (previewObject.activeSelf)
             {
-                map.Attach((int)previewObject.transform.position.x, (int)previewObject.transform.position.z, brushPrefab);
+                Vector3Int pos = Vector3Int.FloorToInt(previewObject.transform.position);
+                map.Attach(pos.x, pos.z, brushPrefab);
                 previewObject.SetActive(false);
             }
         }
