@@ -289,6 +289,7 @@ public class Map : MonoBehaviour
             int dx = (i % 3);
             int dz = (i / 3);
             if (dx == 1 && dz == 1) continue;
+            if (dx != 1 && dz != 1) continue;
             if (GetTile(x - 1 + dx, z - 1 + dz) != null) adjacentTiles.Add(GetTile(x - 1 + dx, z - 1 + dz));
         }
         return adjacentTiles;

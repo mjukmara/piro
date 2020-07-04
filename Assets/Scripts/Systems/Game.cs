@@ -10,6 +10,7 @@ public class Game : MonoBehaviour
     public static Game Instance { get; private set; }
     public GameState gameState;
     public GameEvents gameEvents;
+    public Map map;
 
     public enum SCENE_INDEXES
     {

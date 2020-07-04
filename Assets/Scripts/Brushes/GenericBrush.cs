@@ -5,6 +5,7 @@ using UnityEngine;
 public class GenericBrush : MonoBehaviour, IBrush
 {
     GameObject previewObject;
+    public GameObject drawObject;
     public IAttachment attachment;
     public Renderer[] previewObjectRenderers;
 
@@ -22,9 +23,9 @@ public class GenericBrush : MonoBehaviour, IBrush
 
     public bool DrawEnd(Map map, Vector3Int coordinate, GameObject brushPrefab)
     {
-        if (brushPrefab)
+        if (drawObject)
         {
-            return map.Attach(coordinate.x, coordinate.z, brushPrefab);
+            return map.Attach(coordinate.x, coordinate.z, drawObject);
         } else
         {
             return false;
@@ -36,7 +37,7 @@ public class GenericBrush : MonoBehaviour, IBrush
         if (!previewObject && brushPrefab != null)
         {
             previewObject = Instantiate(brushPrefab);
-            attachment = previewObject.GetComponent(typeof(IAttachment)) as IAttachment;
+            attachment = previewObject.GetComponentInChildren(typeof(IAttachment)) as IAttachment;
             previewObjectRenderers = previewObject.GetComponentsInChildren<Renderer>();
         }
 

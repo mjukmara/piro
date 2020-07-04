@@ -91,14 +91,14 @@ public class TileBuilder : MonoBehaviour
             Debug.LogWarning("Could not assign brush. The brush must implement IBrush interface...");
         }
 
-        IAttachment attachment = brushPrefab.GetComponent(typeof(IAttachment)) as IAttachment;
-        if (attachment != null)
-        {
+        //IAttachment attachment = brushPrefab.GetComponent(typeof(IAttachment)) as IAttachment;
+        //if (attachment != null)
+        //{
             this.brushPrefab = brushPrefab;
-        }
-        else {
-            Debug.LogWarning("Could not assign brush. The brush must implement IAttachable interface...");
-        }
+        //}
+        //else {
+        //    Debug.LogWarning("Could not assign brush. The brush must implement IAttachable interface...");
+        //}
     }
 
     public void ClearBrush()

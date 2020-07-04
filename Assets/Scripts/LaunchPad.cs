@@ -7,6 +7,10 @@ public class LaunchPad : MonoBehaviour, IAttachment
     public int width = 1;
     public int length = 1;
 
+    void Start() {
+    
+    }
+
     public Vector3Int GetDimension()
     {
         return new Vector3Int(width, 0, length);

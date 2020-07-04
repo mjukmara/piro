@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7742573896411381730}
   - component: {fileID: 6670831800344786539}
-  - component: {fileID: 1580825155553333000}
+  - component: {fileID: 5382235677890820624}
   m_Layer: 0
   m_Name: House
   m_TagString: Untagged
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 3
   length: 2
---- !u!114 &1580825155553333000
+--- !u!114 &5382235677890820624
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,9 +56,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 7742573896411381731}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d04b16d44d40e094abf123104e3d4cf4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1824e9afe8e752c48b2ea0802c22cf51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkerPrefab: {fileID: 7855930269890837823, guid: 78a077116ace463459db4b7eb4ba15d0,
+    type: 3}
 --- !u!1001 &8167933989761881278
 PrefabInstance:
   m_ObjectHideFlags: 0

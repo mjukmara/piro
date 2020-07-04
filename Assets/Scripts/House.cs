@@ -5,6 +5,14 @@ public class House : MonoBehaviour, IAttachment
     public int width = 1;
     public int length = 1;
 
+    void Start() {
+
+    }
+
+    void Update() {
+
+    }
+    
     public void OnAttached(IAttachPoint attachPoint)
     {
         //throw new System.NotImplementedException();

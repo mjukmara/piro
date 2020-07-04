@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3493821319762343998}
   - component: {fileID: 8411589021587266141}
-  - component: {fileID: -757578302796174181}
+  - component: {fileID: 7959405099956033530}
   m_Layer: 0
   m_Name: LaunchPad
   m_TagString: Untagged
@@ -47,7 +47,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   width: 2
   length: 4
---- !u!114 &-757578302796174181
+--- !u!114 &7959405099956033530
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -56,9 +56,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 3493821319762343999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d04b16d44d40e094abf123104e3d4cf4, type: 3}
+  m_Script: {fileID: 11500000, guid: 1824e9afe8e752c48b2ea0802c22cf51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  walkerPrefab: {fileID: 7855930269890837823, guid: 54e9ec0703901d043af9cec7854e2aa6,
+    type: 3}
 --- !u!1001 &3493821320293858519
 PrefabInstance:
   m_ObjectHideFlags: 0

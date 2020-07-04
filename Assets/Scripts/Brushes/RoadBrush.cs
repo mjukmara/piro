@@ -44,8 +44,8 @@ public class RoadBrush : MonoBehaviour, IBrush
     {
         if (drawBeginCoordinate == null) return;
 
-        DrawPreviewRepeat(map, previewObjectsX, drawBeginCoordinate.GetValueOrDefault(), coordinate, brushPrefab, new Vector3Int(0, 0, 1), false);
-        DrawPreviewRepeat(map, previewObjectsZ, drawBeginCoordinate.GetValueOrDefault(), coordinate, brushPrefab, new Vector3Int(1, 0, 0), true);
+        DrawPreviewRepeat(map, previewObjectsX, drawBeginCoordinate.GetValueOrDefault(), coordinate, brushPrefab, new Vector3Int(0, 0, -1), false);
+        DrawPreviewRepeat(map, previewObjectsZ, drawBeginCoordinate.GetValueOrDefault(), coordinate, brushPrefab, new Vector3Int(-1, 0, 0), true);
     }
 
     public void Reset()
