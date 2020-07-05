@@ -8,6 +8,8 @@ public class Walker : MonoBehaviour
     private Map map;
 
     private float walkRate = 1.25f;
+    private Quaternion lastRotation;
+    private Quaternion targetRotation;
     private ITile lastTile;
     private ITile destinationTile;
     private float walkStart = 0f;
@@ -26,6 +28,9 @@ public class Walker : MonoBehaviour
             // Tween move
             float progress = (Time.time - walkStart) / (1f / walkRate);
             transform.position = Vector3.Lerp(lastTile.GetCoordinate(), destinationTile.GetCoordinate(), LeanTween.easeInOutCubic(0f, 1f, progress));
+
+            // Tween rotate
+            transform.rotation = Quaternion.Lerp(lastRotation, targetRotation, LeanTween.easeOutCirc(0f, 1f, progress));
         }
 
         if (Time.time > walkStart + 1f / walkRate) {
@@ -71,6 +76,10 @@ public class Walker : MonoBehaviour
                         memory.Add(lastTile);
                     }
                 }
+
+                Vector3 dir = (destinationTile.GetCoordinate() - transform.position).normalized;
+                lastRotation = transform.rotation;
+                targetRotation = Quaternion.LookRotation(dir);
 
                 steps++;
             }
