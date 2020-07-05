@@ -1,17 +1,18 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class Walker : MonoBehaviour
 {
     private Map map;
 
-    private float walkRate = 1.5f;
+    private float walkRate = 1.25f;
     private ITile lastTile;
     private ITile destinationTile;
     private float walkStart = 0f;
 
-    private int maxSteps = 10;
+    private int maxSteps = 16;
     private int steps = 0;
     private List<ITile> memory = new List<ITile>();
 
@@ -35,25 +36,54 @@ public class Walker : MonoBehaviour
                 }
             }
 
-            if (map) {
-                ITile roadTile = GetDestinationRoadTile();
-                if (roadTile != null) {
-                    Vector3Int pos = Vector3Int.FloorToInt(transform.position);
-                    lastTile = map.GetTile(pos.x, pos.z);
-                    destinationTile = roadTile;
-                    walkStart = Time.time;
-                    memory.Add(lastTile);
-                    steps++;
-                }
-            }
-        }
 
-        if (steps >= maxSteps) {
-            Destroy(gameObject);
+            if (steps >= maxSteps * 2 || (steps > 0 && memory.Count == 0)) {
+                Destroy(gameObject);
+            }
+
+            TryWalk();
+        }
+    }
+
+    void TryWalk() {
+
+        if (map) {
+            ITile roadTile = GetDestinationRoadTile();
+            if (roadTile != null) {
+                Vector3Int pos = Vector3Int.FloorToInt(transform.position);
+                lastTile = map.GetTile(pos.x, pos.z);
+                destinationTile = roadTile;
+                walkStart = Time.time;
+
+                bool backtraced = false;
+                for (int i=0; i<memory.Count; i++) {
+                    ITile tile = memory[i];
+                    if (tile == destinationTile) {
+                        Debug.Log("Already been here");
+                        memory = memory.Take(i).ToList();
+                        backtraced = true;
+                        break;
+                    }
+                }
+
+                if (!backtraced) {
+                    if (steps < maxSteps) {
+                        memory.Add(lastTile);
+                    }
+                }
+
+                steps++;
+            }
         }
     }
 
     ITile GetDestinationRoadTile() {
+        if (steps >= maxSteps && memory.Count > 0) {
+            ITile destinationTile = memory[memory.Count - 1];
+            memory.RemoveAt(memory.Count - 1);
+            return destinationTile;
+        }
+
         Vector3Int pos = Vector3Int.FloorToInt(transform.position);
 
         ITile tile = map.GetTile(pos.x, pos.z);

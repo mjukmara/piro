@@ -51,8 +51,8 @@ public class Game : MonoBehaviour
         }
         gameState = new GameState();
         gameState.mapData = new MapData();
-        gameState.mapData.width = 8;
-        gameState.mapData.length = 8;
+        gameState.mapData.width = 16;
+        gameState.mapData.length = 16;
     }
 
     private void Start()
