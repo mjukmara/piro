@@ -52,6 +52,8 @@ public class WalkerSpawner : MonoBehaviour
             }
         }
 
+        z++;
+
         for (; z < attachment.GetDimension().z; z++) {
             ITile tile = map.GetTile(myPos.x + x, myPos.z + z);
             if (tile != null && tile.GetAttachment() is Road) {
@@ -59,6 +61,8 @@ public class WalkerSpawner : MonoBehaviour
             }
         }
 
+        x--;
+        
         for (; x > -1; x--) {
             ITile tile = map.GetTile(myPos.x + x, myPos.z + z);
             if (tile != null && tile.GetAttachment() is Road) {
@@ -66,7 +70,9 @@ public class WalkerSpawner : MonoBehaviour
             }
         }
 
-        for (; z >= -1; z--) {
+        z--;
+        
+        for (; z > -1; z--) {
             ITile tile = map.GetTile(myPos.x + x, myPos.z + z);
             if (tile != null && tile.GetAttachment() is Road) {
                 return tile;

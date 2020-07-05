@@ -8,6 +8,7 @@ using UnityEngine;
 public class GameState
 {
     public MapData mapData;
+    public ResourceData resourceData;
 
     public static bool Save(string saveName, object saveData)
     {
